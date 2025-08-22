@@ -1,103 +1,228 @@
-import Image from "next/image";
+'use client';
+
+import { useState, useEffect } from 'react';
+import { useGame } from '@/hooks/useGame';
+import { AuthButtons } from '@/components/AuthButtons';
+import { useRouter } from 'next/navigation';
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const [selectedChoice, setSelectedChoice] = useState('');
+  const router = useRouter();
+  const {
+    gameData,
+    gameInfo,
+    loading,
+    error,
+    startNewGame,
+    loadGame,
+    loadGameInfo,
+    selectChoice,
+    resetGame,
+  } = useGame();
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+  const handleStartNewGame = async () => {
+    const result = await startNewGame();
+    if (result.success) {
+      // 새 게임 시작 성공 시 /game 페이지로 이동
+      router.push('/game');
+    }
+  };
+
+  const handleLoadGame = async () => {
+    const result = await loadGame();
+    if (result.success) {
+      // 게임 로드 성공 시 /game 페이지로 이동
+      // 자동으로 새 게임을 시작한 경우에도 이동
+      if (result.autoStarted) {
+        console.log('자동 새 게임 시작됨, /game 페이지로 이동');
+      }
+      router.push('/game');
+    }
+  };
+
+  const handleLoadGameInfo = async () => {
+    await loadGameInfo();
+  };
+
+  const handleChoiceSelect = async () => {
+    if (selectedChoice.trim()) {
+      await selectChoice(parseInt(selectedChoice));
+      setSelectedChoice('');
+    }
+  };
+
+  const handleReset = () => {
+    resetGame();
+    setSelectedChoice('');
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50">
+      {/* 배경 장식 */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 left-0 w-96 h-96 bg-red-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+      </div>
+
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 헤더 */}
+        <div className="text-center mb-12">
+          <div className="mb-6">
+            <div className="text-8xl mb-4">🏛️</div>
+            <h1 className="text-6xl font-bold text-gray-900 mb-6 font-serif">
+              고운사 요괴 퇴치기
+            </h1>
+            <p className="text-2xl text-gray-700 mb-8 font-serif">
+              고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!
+            </p>
+          </div>
+
+          {/* 로그인 버튼 */}
+          <div className="flex justify-end mb-8">
+            <AuthButtons />
+          </div>
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+
+        {/* 메인 컨텐츠 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center mb-16">
+          {/* 왼쪽: 게임 소개 */}
+          <div className="space-y-8">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-orange-200">
+              <h2 className="text-3xl font-bold text-gray-900 mb-6 font-serif">
+                🎮 게임 소개
+              </h2>
+              <div className="space-y-4 text-lg text-gray-700">
+                <p>
+                  <span className="font-semibold text-red-600">고운사</span>에
+                  <span className="font-semibold text-purple-600">
+                    요괴들이 침입
+                  </span>
+                  했습니다!
+                </p>
+                <p>
+                  <span className="font-semibold text-blue-600">산신 분노</span>
+                  ,<span className="font-semibold text-green-600">구미호</span>,
+                  <span className="font-semibold text-yellow-600">
+                    달걀귀신
+                  </span>{' '}
+                  등 다양한 요괴들이 사찰을 장악하고 있습니다.
+                </p>
+                <p>
+                  당신의{' '}
+                  <span className="font-semibold text-red-600">체력</span>과
+                  <span className="font-semibold text-purple-600">정신력</span>
+                  을 관리하며 요괴들을 퇴치해 나가세요!
+                </p>
+              </div>
+            </div>
+
+            {/* 게임 특징 */}
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-orange-200">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 font-serif">
+                ✨ 게임 특징
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                    🗺️
+                  </div>
+                  <span className="text-gray-700">30개 위치 탐험</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                    🐉
+                  </div>
+                  <span className="text-gray-700">9종 요괴 퇴치</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    📖
+                  </div>
+                  <span className="text-gray-700">풍부한 스토리</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                    🎯
+                  </div>
+                  <span className="text-gray-700">전략적 선택</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 오른쪽: 게임 컨트롤 */}
+          <div className="space-y-6">
+            <div className="bg-white/80 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-orange-200">
+              <h3 className="text-2xl font-bold text-gray-900 mb-6 font-serif">
+                🎮 게임 시작
+              </h3>
+              <div className="space-y-4">
+                <button
+                  onClick={handleStartNewGame}
+                  disabled={loading}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-red-500 to-red-600 text-white text-xl font-bold rounded-xl hover:from-red-600 hover:to-red-700 focus:ring-4 focus:ring-red-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+                >
+                  {loading ? '🔄 시작 중...' : '🔥 새 게임 시작'}
+                </button>
+                <button
+                  onClick={handleLoadGame}
+                  disabled={loading}
+                  className="w-full px-8 py-4 bg-gradient-to-r from-blue-500 to-blue-600 text-white text-xl font-bold rounded-xl hover:from-blue-600 hover:to-blue-700 focus:ring-4 focus:ring-blue-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-200 transform hover:scale-105"
+                >
+                  {loading ? '🔄 로딩 중...' : '📂 기존 게임 로드'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="text-center py-16">
+          <div className="text-gray-400 text-8xl mb-6">🏛️</div>
+          <h3 className="text-3xl font-bold text-gray-900 mb-4 font-serif">
+            고운사에 오신 것을 환영합니다
+          </h3>
+          <p className="text-xl text-gray-600 mb-8">
+            "새 게임 시작" 버튼을 클릭하여 요괴 퇴치 모험을 시작하거나
+            <br />
+            "기존 게임 로드"로 이전 모험을 이어가세요
+          </p>
+        </div>
+
+        {/* 푸터 */}
+        <div className="text-center mt-16 pt-8 border-t border-orange-200">
+          <p className="text-gray-600">
+            🏛️ 고운사 요괴 퇴치기 - 전통과 판타지의 만남 🐉
+          </p>
+        </div>
+      </div>
+
+      {/* 애니메이션 스타일 */}
+      <style jsx>{`
+        @keyframes blob {
+          0% {
+            transform: translate(0px, 0px) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+          100% {
+            transform: translate(0px, 0px) scale(1);
+          }
+        }
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+      `}</style>
     </div>
   );
 }
