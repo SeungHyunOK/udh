@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
+import { Notification } from '@/components/Notification';
 import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 
@@ -16,12 +17,14 @@ export default function GamePage() {
     gameInfo,
     loading,
     error,
+    notification,
     startNewGame,
     loadGame,
     loadGameInfo,
     autoLoadGameInfo,
     selectChoice,
     resetGame,
+    closeNotification,
   } = useGame();
 
   // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
@@ -87,6 +90,15 @@ export default function GamePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* 알림 표시 */}
+      {notification && (
+        <Notification
+          message={notification.message}
+          type={notification.type}
+          onClose={closeNotification}
+        />
+      )}
+
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* 헤더 */}
         <div className="text-center mb-8">
@@ -175,7 +187,7 @@ export default function GamePage() {
                 </div>
               )}
 
-              {/* 사용 가능한 선택지 */}
+              {/* 사용 가능 한 선택지 */}
               {gameInfo.available_choices &&
                 gameInfo.available_choices.length > 0 && (
                   <div className="mt-4">
@@ -194,7 +206,7 @@ export default function GamePage() {
             </div>
 
             {/* 오른쪽: 현재 상태 섹션 */}
-            <div className="bg-white rounded-lg shadow-md p-6">
+            <div className="bg-white rounded-lg shadow-md p-6 ">
               <h3 className="text-lg font-semibold text-gray-900 mb-4">
                 현재 상태
               </h3>

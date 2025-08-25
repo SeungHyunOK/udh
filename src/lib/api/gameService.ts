@@ -27,6 +27,14 @@ export class GameService {
       };
     }
 
+    // 401 에러인 경우 특별한 메시지 반환
+    if (response.error?.status === 401) {
+      return {
+        success: false,
+        error: '다시 로그인 해주세요!',
+      };
+    }
+
     return {
       success: false,
       error: response.error?.message || '새 게임을 시작하는데 실패했습니다.',
@@ -63,6 +71,15 @@ export class GameService {
     }
 
     console.log('loadGame 실패:', response.error);
+
+    // 401 에러인 경우 특별한 메시지 반환
+    if (response.error?.status === 401) {
+      return {
+        success: false,
+        error: '다시 로그인 해주세요!',
+      };
+    }
+
     return {
       success: false,
       error: response.error?.message || '게임을 불러오는데 실패했습니다.',
@@ -93,6 +110,14 @@ export class GameService {
       }
     }
 
+    // 401 에러인 경우 특별한 메시지 반환
+    if (response.error?.status === 401) {
+      return {
+        success: false,
+        error: '다시 로그인 해주세요!',
+      };
+    }
+
     return {
       success: false,
       error: response.error?.message || '게임 정보를 불러오는데 실패했습니다.',
@@ -115,6 +140,14 @@ export class GameService {
         success: true,
         data: response.data,
         message: '선택이 완료되었습니다.',
+      };
+    }
+
+    // 401 에러인 경우 특별한 메시지 반환
+    if (response.error?.status === 401) {
+      return {
+        success: false,
+        error: '다시 로그인 해주세요!',
       };
     }
 

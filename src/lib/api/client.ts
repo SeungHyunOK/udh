@@ -1,14 +1,23 @@
 import { API_CONFIG, HTTP_STATUS, API_ERROR_MESSAGES } from './config';
 import type { APIResponse, APIError } from '@/types/api';
 
+// 401 에러 발생 시 로그아웃 처리를 위한 콜백 함수 타입
+export type UnauthorizedCallback = () => void;
+
 // HTTP 클라이언트 클래스
 class HTTPClient {
   private baseURL: string;
   private timeout: number;
+  private onUnauthorized: UnauthorizedCallback | null = null;
 
   constructor() {
     this.baseURL = API_CONFIG.BASE_URL;
     this.timeout = API_CONFIG.TIMEOUT;
+  }
+
+  // 401 에러 콜백 설정
+  setUnauthorizedCallback(callback: UnauthorizedCallback) {
+    this.onUnauthorized = callback;
   }
 
   // 기본 헤더 설정
@@ -76,6 +85,21 @@ class HTTPClient {
       });
 
       if (!response.ok) {
+        // 401 Unauthorized 에러 처리
+        if (response.status === HTTP_STATUS.UNAUTHORIZED) {
+          console.log('401 Unauthorized 에러 발생, 로그아웃 처리');
+          if (this.onUnauthorized) {
+            this.onUnauthorized();
+          }
+          return {
+            success: false,
+            error: {
+              status: HTTP_STATUS.UNAUTHORIZED,
+              message: API_ERROR_MESSAGES.UNAUTHORIZED,
+            },
+          };
+        }
+
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || `HTTP ${response.status}`);
       }

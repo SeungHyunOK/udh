@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
+import { Notification } from '@/components/Notification';
 import { useRouter } from 'next/navigation';
 
 export default function Home() {
@@ -13,11 +14,13 @@ export default function Home() {
     gameInfo,
     loading,
     error,
+    notification,
     startNewGame,
     loadGame,
     loadGameInfo,
     selectChoice,
     resetGame,
+    closeNotification,
   } = useGame();
 
   const handleStartNewGame = async () => {
@@ -66,6 +69,15 @@ export default function Home() {
       </div>
 
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        {/* 알림 표시 */}
+        {notification && (
+          <Notification
+            message={notification.message}
+            type={notification.type}
+            onClose={closeNotification}
+          />
+        )}
+
         {/* 헤더 */}
         <div className="text-center mb-12">
           <div className="mb-6">

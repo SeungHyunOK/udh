@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSession, signOut } from 'next-auth/react';
 import { gameService } from '@/lib/api/gameService';
+import { httpClient } from '@/lib/api/client';
 import type { GameData, GameInfo, SelectChoiceRequest } from '@/types/api';
 
 // 게임 상태를 관리하는 Hook
@@ -10,6 +11,38 @@ export function useGame() {
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [notification, setNotification] = useState<{
+    message: string;
+    type: 'success' | 'error' | 'warning' | 'info';
+  } | null>(null);
+
+  // 401 에러 발생 시 자동 로그아웃 처리
+  const handleUnauthorized = useCallback(() => {
+    console.log('401 에러로 인한 자동 로그아웃 처리');
+    const message = '다시 로그인 해주세요!';
+    setError(message);
+    setNotification({
+      message,
+      type: 'error',
+    });
+    setGameData(null);
+    setGameInfo(null);
+
+    // 잠시 후 로그아웃 처리 (사용자가 알림을 볼 수 있도록)
+    setTimeout(() => {
+      signOut({ callbackUrl: '/' });
+    }, 2000);
+  }, []);
+
+  // HTTP 클라이언트에 401 에러 콜백 설정
+  useEffect(() => {
+    httpClient.setUnauthorizedCallback(handleUnauthorized);
+  }, [handleUnauthorized]);
+
+  // 알림 닫기
+  const closeNotification = useCallback(() => {
+    setNotification(null);
+  }, []);
 
   // Google ID 토큰 가져오기
   const getGoogleIdToken = useCallback(async () => {
@@ -284,6 +317,7 @@ export function useGame() {
     gameInfo,
     loading,
     error,
+    notification,
     isAuthenticated: !!session,
     startNewGame,
     loadGame,
@@ -291,5 +325,6 @@ export function useGame() {
     autoLoadGameInfo,
     selectChoice,
     resetGame,
+    closeNotification,
   };
 }
