@@ -155,7 +155,7 @@ export default function Home() {
               🏛️
             </div>
             <h1 className="text-6xl font-black mb-8 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent font-['Noto_Sans_KR'] drop-shadow-lg tracking-wider">
-              고운사 요괴 퇴치기
+              UDH-의성데몬헌터
             </h1>
             <p className="text-2xl text-gray-700 mb-8 font-['Pretendard'] font-medium leading-relaxed max-w-4xl mx-auto">
               고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!
@@ -253,7 +253,7 @@ export default function Home() {
                 🏛️
               </div>
               <h3 className="text-3xl font-bold text-red-600 mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
-                고운사에 오신 것을 환영합니다
+                UDH-의성데몬헌터에 오신 것을 환영합니다
               </h3>
               <p className="text-xl text-gray-700 mb-8 font-['Pretendard'] font-medium leading-relaxed relative z-10">
                 "새 게임 시작" 버튼을 클릭하여 요괴 퇴치 모험을 시작하거나
@@ -289,7 +289,7 @@ export default function Home() {
         {/* 푸터 */}
         <div className="text-center mt-20 pt-8 border-t border-orange-200 relative z-10">
           <p className="text-gray-600 font-['Pretendard'] font-medium">
-            🏛️ 고운사 요괴 퇴치기 - 전통과 판타지의 만남 🐉
+            🏛️ UDH-의성데몬헌터 - 전통과 판타지의 만남 🐉
           </p>
         </div>
       </div>
