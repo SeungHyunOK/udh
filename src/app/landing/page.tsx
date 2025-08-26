@@ -97,6 +97,7 @@ export default function LandingPage() {
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full"
+              loading="lazy"
             ></iframe>
           </div>
         </div>
@@ -124,6 +125,9 @@ export default function LandingPage() {
                       width={128}
                       height={128}
                       className="w-full h-full object-cover"
+                      loading="lazy"
+                      placeholder="blur"
+                      blurDataURL="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAYEBQYFBAYGBQYHBwYIChAKCgkJChQODwwQFxQYGBcUFhYaHSUfGhsjHBYWICwgIyYnKSopGR8tMC0oMCUoKSj/2wBDAQcHBwoIChMKChMoGhYaKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCgoKCj/wAARCAABAAEDASIAAhEBAxEB/8QAFQABAQAAAAAAAAAAAAAAAAAAAAv/xAAUEAEAAAAAAAAAAAAAAAAAAAAA/8QAFQEBAQAAAAAAAAAAAAAAAAAAAAX/xAAUEQEAAAAAAAAAAAAAAAAAAAAA/9oADAMBAAIRAxAAPwCdABmX/9k="
                     />
                   </div>
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -178,12 +182,15 @@ export default function LandingPage() {
           <p className="text-gray-700 mb-8 max-w-2xl mx-auto">
             의성의 요괴들과의 전투에 참여하고 고대 사찰들의 비밀을 탐험해보세요.
           </p>
-          <Link
-            href="/auth/signin"
-            className="inline-block bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xl px-12 py-4 rounded-full hover:from-red-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-red-500/50"
-          >
-            게임 시작하기
-          </Link>
+
+          <div className="flex justify-center">
+            <Link
+              href="/"
+              className="inline-block bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold text-xl px-12 py-4 rounded-full hover:from-red-600 hover:to-orange-600 transform hover:scale-105 transition-all duration-300 shadow-2xl hover:shadow-red-500/50 focus:outline-none focus:ring-4 focus:ring-red-300 focus:ring-offset-2"
+            >
+              게임하러가기
+            </Link>
+          </div>
         </div>
       </section>
 

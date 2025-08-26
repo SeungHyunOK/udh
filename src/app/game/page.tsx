@@ -10,7 +10,6 @@ import { useRouter } from 'next/navigation';
 export default function GamePage() {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const [selectedChoice, setSelectedChoice] = useState('');
   const [processingChoice, setProcessingChoice] = useState<number | null>(null);
   const {
     gameData,
@@ -41,6 +40,13 @@ export default function GamePage() {
     }
   }, [status, session, autoLoadGameInfo]);
 
+  // gameData가 있을 때 자동으로 게임 정보 로드
+  useEffect(() => {
+    if (gameData && status === 'authenticated' && session) {
+      loadGameInfo();
+    }
+  }, [gameData, status, session, loadGameInfo]);
+
   // 로딩 중일 때
   if (status === 'loading') {
     return (
@@ -66,10 +72,6 @@ export default function GamePage() {
     await loadGame();
   };
 
-  const handleLoadGameInfo = async () => {
-    await loadGameInfo();
-  };
-
   const handleChoiceSelect = async (choiceIndex: number) => {
     setProcessingChoice(choiceIndex);
     try {
@@ -81,7 +83,6 @@ export default function GamePage() {
 
   const handleReset = () => {
     resetGame();
-    setSelectedChoice('');
   };
 
   const handleBackToHome = () => {
@@ -166,7 +167,7 @@ export default function GamePage() {
                         key={index}
                         onClick={() => handleChoiceSelect(index)}
                         disabled={processingChoice !== null}
-                        className="w-full text-left p-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors disabled:opacity-50 relative"
+                        className="w-full text-left p-3 bg-green-50 hover:bg-green-100 border border-green-200 rounded-lg transition-colors disabled:opacity-50 relative focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2"
                       >
                         {processingChoice === index ? (
                           <div className="flex items-center justify-between">
@@ -187,7 +188,7 @@ export default function GamePage() {
                 </div>
               )}
 
-              {/* 사용 가능 한 선택지 */}
+              {/* 사용 가능한 선택지 */}
               {gameInfo.available_choices &&
                 gameInfo.available_choices.length > 0 && (
                   <div className="mt-4">

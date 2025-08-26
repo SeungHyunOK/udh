@@ -5,58 +5,98 @@ import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
 import { Notification } from '@/components/Notification';
 import { useRouter } from 'next/navigation';
+import { useSession } from 'next-auth/react';
 
 export default function Home() {
-  const [selectedChoice, setSelectedChoice] = useState('');
   const router = useRouter();
+  const { data: session } = useSession();
   const {
-    gameData,
-    gameInfo,
     loading,
-    error,
     notification,
     startNewGame,
     loadGame,
-    loadGameInfo,
-    selectChoice,
-    resetGame,
     closeNotification,
+    setNotification,
   } = useGame();
 
   const handleStartNewGame = async () => {
-    const result = await startNewGame();
-    if (result.success) {
-      // 새 게임 시작 성공 시 /game 페이지로 이동
-      router.push('/game');
+    // 로그인 상태 체크
+    if (!session) {
+      setNotification({
+        message: '로그인이 필요합니다!',
+        type: 'warning',
+      });
+      return;
+    }
+
+    try {
+      const result = await startNewGame();
+      if (result.success) {
+        // 성공 알림 표시
+        setNotification({
+          message: '새 게임이 시작되었습니다!',
+          type: 'success',
+        });
+
+        // 잠시 후 /game 페이지로 이동 (사용자가 알림을 볼 수 있도록)
+        setTimeout(() => {
+          router.push('/game');
+        }, 1000);
+      } else {
+        // 실패 시 에러 알림 표시
+        setNotification({
+          message: result.error || '새 게임을 시작하는데 실패했습니다.',
+          type: 'error',
+        });
+      }
+    } catch (error) {
+      // 예외 발생 시 에러 알림 표시
+      console.error('새 게임 시작 중 예외 발생:', error);
+      setNotification({
+        message: '예상치 못한 오류가 발생했습니다.',
+        type: 'error',
+      });
     }
   };
 
   const handleLoadGame = async () => {
-    const result = await loadGame();
-    if (result.success) {
-      // 게임 로드 성공 시 /game 페이지로 이동
-      // 자동으로 새 게임을 시작한 경우에도 이동
-      if (result.autoStarted) {
-        console.log('자동 새 게임 시작됨, /game 페이지로 이동');
+    // 로그인 상태 체크
+    if (!session) {
+      setNotification({
+        message: '로그인이 필요합니다!',
+        type: 'warning',
+      });
+      return;
+    }
+
+    try {
+      const result = await loadGame();
+      if (result.success) {
+        // 성공 알림 표시
+        setNotification({
+          message: '게임을 불러왔습니다!',
+          type: 'success',
+        });
+
+        // 잠시 후 /game 페이지로 이동 (사용자가 알림을 볼 수 있도록)
+        setTimeout(() => {
+          router.push('/game');
+        }, 1000);
+      } else {
+        // 실패 시 에러 알림 표시
+        setNotification({
+          message: result.error || '게임을 불러오는데 실패했습니다.',
+          type: 'error',
+        });
       }
-      router.push('/game');
+    } catch (error) {
+      // 예외 발생 시 에러 알림 표시
+      console.error('게임 로드 중 예외 발생:', error);
+      setNotification({
+        message: '예상치 못한 오류가 발생했습니다.',
+        type: 'error',
+      });
     }
-  };
-
-  const handleLoadGameInfo = async () => {
-    await loadGameInfo();
-  };
-
-  const handleChoiceSelect = async () => {
-    if (selectedChoice.trim()) {
-      await selectChoice(parseInt(selectedChoice));
-      setSelectedChoice('');
-    }
-  };
-
-  const handleReset = () => {
-    resetGame();
-    setSelectedChoice('');
   };
 
   return (

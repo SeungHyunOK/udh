@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useSession, signOut } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
 import { gameService } from '@/lib/api/gameService';
 import { httpClient } from '@/lib/api/client';
 import type { GameData, GameInfo, SelectChoiceRequest } from '@/types/api';
@@ -7,6 +8,7 @@ import type { GameData, GameInfo, SelectChoiceRequest } from '@/types/api';
 // 게임 상태를 관리하는 Hook
 export function useGame() {
   const { data: session } = useSession();
+  const router = useRouter();
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [loading, setLoading] = useState(false);
@@ -75,31 +77,23 @@ export function useGame() {
     setError(null);
 
     try {
-      console.log('새 게임 시작 시작');
       const token = await getGoogleIdToken();
       const response = await gameService.startNewGame(token);
 
-      if (response.success && response.data) {
-        console.log('새 게임 시작 성공:', response.data);
-        setGameData(response.data);
-
-        // 새 게임 시작 성공 시 게임 정보도 자동으로 로드
-        try {
-          console.log('새 게임 정보 자동 로드 시작');
-          const infoResponse = await gameService.loadGameInfo(token);
-          if (infoResponse.success && infoResponse.data) {
-            console.log('새 게임 정보 로드 성공:', infoResponse.data);
-            setGameInfo(infoResponse.data);
-          } else {
-            console.warn('새 게임 정보 로드 실패:', infoResponse.error);
-          }
-        } catch (infoErr) {
-          console.warn('새 게임 정보 로드 중 예외 발생:', infoErr);
+      if (response.success) {
+        // response.data가 null이어도 성공으로 처리 (백엔드에서 새 게임 생성 후 리다이렉트하는 경우)
+        if (response.data) {
+          setGameData(response.data);
         }
+
+        // 성공 알림 표시
+        setNotification({
+          message: response.message || '새 게임이 시작되었습니다!',
+          type: 'success',
+        });
 
         return { success: true, data: response.data };
       } else {
-        console.log('새 게임 시작 실패:', response.error);
         setError(response.error || '새 게임을 시작하는데 실패했습니다.');
         return { success: false, error: response.error };
       }
@@ -123,78 +117,21 @@ export function useGame() {
     setError(null);
 
     try {
-      console.log('useGame loadGame 시작');
       const token = await getGoogleIdToken();
-      console.log('토큰 획득:', !!token);
-
       const response = await gameService.loadGame(token);
-      console.log('gameService.loadGame 응답:', response);
 
       if (response.success) {
         // response.data가 null이어도 성공으로 처리 (백엔드 리다이렉트 케이스)
         if (response.data) {
-          console.log('게임 로드 성공, gameData 설정:', response.data);
           setGameData(response.data);
-        } else {
-          console.log(
-            '게임 로드 성공 (response: null), gameData는 설정하지 않음'
-          );
-        }
-
-        // 게임 로드 성공 시 게임 정보도 자동으로 로드
-        let infoResponse: any = null;
-        let autoStarted = false;
-
-        try {
-          console.log('게임 정보 자동 로드 시작');
-          infoResponse = await gameService.loadGameInfo(token);
-          if (infoResponse.success && infoResponse.data) {
-            console.log('게임 정보 로드 성공:', infoResponse.data);
-            setGameInfo(infoResponse.data);
-          } else {
-            console.warn('게임 정보 로드 실패:', infoResponse.error);
-
-            // 저장된 데이터가 없는 경우 자동으로 새 게임 시작
-            if (
-              infoResponse.error ===
-              '저장된 데이터가 없습니다. 새로운 게임을 시작합니다.'
-            ) {
-              console.log('저장된 데이터가 없음, 자동으로 새 게임 시작');
-              autoStarted = true;
-
-              try {
-                const newGameResponse = await gameService.startNewGame(token);
-                if (newGameResponse.success && newGameResponse.data) {
-                  console.log('자동 새 게임 시작 성공:', newGameResponse.data);
-                  setGameData(newGameResponse.data);
-
-                  // 새 게임 시작 후 다시 게임 정보 로드 시도
-                  const retryInfoResponse =
-                    await gameService.loadGameInfo(token);
-                  if (retryInfoResponse.success && retryInfoResponse.data) {
-                    console.log(
-                      '새 게임 정보 로드 성공:',
-                      retryInfoResponse.data
-                    );
-                    setGameInfo(retryInfoResponse.data);
-                  }
-                }
-              } catch (newGameErr) {
-                console.warn('자동 새 게임 시작 실패:', newGameErr);
-              }
-            }
-          }
-        } catch (infoErr) {
-          console.warn('게임 정보 로드 중 예외 발생:', infoErr);
         }
 
         return {
           success: true,
           data: response.data,
-          autoStarted: autoStarted, // 자동 새 게임 시작 여부
+          message: response.message || '게임을 불러왔습니다.',
         };
       } else {
-        console.log('게임 로드 실패, 에러 설정:', response.error);
         setError(response.error || '게임을 불러오는데 실패했습니다.');
         return { success: false, error: response.error };
       }
@@ -326,5 +263,6 @@ export function useGame() {
     selectChoice,
     resetGame,
     closeNotification,
+    setNotification,
   };
 }
