@@ -22,7 +22,7 @@ export default function LandingPage() {
       {/* 배경 장식 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         {/* 맵 배경 이미지 */}
-        <div className="absolute inset-0 opacity-15">
+        <div className="absolute inset-0 opacity-50">
           <Image
             src="/images/landing/map.png"
             alt="의성 지도 배경"
