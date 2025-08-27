@@ -3,11 +3,16 @@ export function cn(...inputs: (string | undefined | null | false)[]): string {
   return inputs.filter(Boolean).join(' ');
 }
 
-// 이미지 경로를 동적으로 처리하는 함수
+// 이미지 경로를 동적으로 처리하는 함수 (클라이언트 사이드 안전)
 export function getImagePath(path: string): string {
-  const isProd = process.env.NODE_ENV === 'production';
-  const basePath = isProd ? '/udh' : '';
-  return `${basePath}${path}`;
+  // 클라이언트 사이드에서 window.location을 통해 basePath 확인
+  if (typeof window !== 'undefined') {
+    const currentPath = window.location.pathname;
+    if (currentPath.startsWith('/udh')) {
+      return `/udh${path}`;
+    }
+  }
+  return path;
 }
 
 // 날짜를 한국어 형식으로 포맷팅

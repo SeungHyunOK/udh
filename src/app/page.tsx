@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
 import { Notification } from '@/components/Notification';
-import { getImagePath } from '@/lib/utils';
 import Image from 'next/image';
 
 export default function Home() {
@@ -61,7 +60,7 @@ export default function Home() {
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 to-gray-700 text-white p-4">
       <div className="relative w-full max-w-4xl bg-gray-800 rounded-xl shadow-2xl p-8 md:p-12 flex flex-col items-center text-center space-y-8">
         <Image
-          src={getImagePath("/images/main/background.png")}
+          src="./images/main/background.png"
           alt="UDH Logo"
           width={150}
           height={150}
