@@ -5,12 +5,10 @@ import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
 import { Notification } from '@/components/Notification';
 import { useRouter } from 'next/navigation';
-import { useSession } from 'next-auth/react';
 import Image from 'next/image';
 
 export default function Home() {
   const router = useRouter();
-  const { data: session } = useSession();
   const {
     loading,
     notification,
@@ -21,15 +19,6 @@ export default function Home() {
   } = useGame();
 
   const handleStartNewGame = async () => {
-    // 로그인 상태 체크
-    if (!session) {
-      setNotification({
-        message: '로그인이 필요합니다!',
-        type: 'warning',
-      });
-      return;
-    }
-
     try {
       const result = await startNewGame();
       if (result.success) {
@@ -61,15 +50,6 @@ export default function Home() {
   };
 
   const handleLoadGame = async () => {
-    // 로그인 상태 체크
-    if (!session) {
-      setNotification({
-        message: '로그인이 필요합니다!',
-        type: 'warning',
-      });
-      return;
-    }
-
     try {
       const result = await loadGame();
       if (result.success) {
