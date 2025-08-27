@@ -91,7 +91,7 @@ export default function GamePage() {
         {/* 배경 이미지 */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="./images/game/background.png"
+            src="/images/game/background.png"
             alt="게임 배경"
             fill
             className="object-cover opacity-20"
@@ -147,7 +147,7 @@ export default function GamePage() {
       {/* 배경 이미지 */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="./images/game/background.png"
+          src="/images/game/background.png"
           alt="게임 배경"
           fill
           className="object-cover opacity-20"
