@@ -115,25 +115,25 @@ export default function Home() {
 
       {/* 배경 장식 */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        {/* 신비로운 입자 효과 */}
+        {/* 신비로운 입자 효과 - 모바일에서는 줄임 */}
         <div className="absolute inset-0">
-          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-yellow-400 rounded-full animate-ping opacity-60"></div>
-          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-red-400 rounded-full animate-ping opacity-40 animation-delay-1000"></div>
-          <div className="absolute bottom-1/4 left-1/2 w-1.5 h-1.5 bg-orange-400 rounded-full animate-ping opacity-50 animation-delay-2000"></div>
-          <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-amber-400 rounded-full animate-ping opacity-30 animation-delay-3000"></div>
+          <div className="absolute top-1/4 left-1/4 w-1 h-1 sm:w-2 sm:h-2 bg-yellow-400 rounded-full animate-ping opacity-60"></div>
+          <div className="absolute top-1/3 right-1/3 w-0.5 h-0.5 sm:w-1 sm:h-1 bg-red-400 rounded-full animate-ping opacity-40 animation-delay-1000"></div>
+          <div className="absolute bottom-1/4 left-1/2 w-1 h-1 sm:w-1.5 sm:h-1.5 bg-orange-400 rounded-full animate-ping opacity-50 animation-delay-2000"></div>
+          <div className="absolute top-2/3 right-1/4 w-0.5 h-0.5 sm:w-1 sm:h-1 bg-amber-400 rounded-full animate-ping opacity-30 animation-delay-3000"></div>
         </div>
 
-        {/* 블롭 애니메이션 */}
-        <div className="absolute top-0 left-0 w-96 h-96 bg-red-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
+        {/* 블롭 애니메이션 - 모바일에서는 크기 조정 */}
+        <div className="absolute top-0 left-0 w-48 h-48 sm:w-96 sm:h-96 bg-red-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob"></div>
+        <div className="absolute top-0 right-0 w-48 h-48 sm:w-96 sm:h-96 bg-yellow-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-2000"></div>
+        <div className="absolute bottom-0 left-0 w-48 h-48 sm:w-96 sm:h-96 bg-orange-100 rounded-full mix-blend-multiply filter blur-xl opacity-20 animate-blob animation-delay-4000"></div>
 
         {/* 신비로운 빛줄 효과 */}
         <div className="absolute top-0 left-1/2 w-px h-full bg-gradient-to-b from-transparent via-yellow-300 to-transparent opacity-30 animate-pulse"></div>
         <div className="absolute top-1/2 left-0 w-full h-px bg-gradient-to-r from-transparent via-orange-300 to-transparent opacity-30 animate-pulse animation-delay-1000"></div>
       </div>
 
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 z-10">
+      <div className="relative max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8 py-4 sm:py-6 lg:py-8 z-10">
         {/* 알림 표시 */}
         {notification && (
           <Notification
@@ -144,42 +144,42 @@ export default function Home() {
         )}
 
         {/* 헤더 */}
-        <div className="text-center mb-16 relative">
+        <div className="text-center mb-8 sm:mb-12 lg:mb-16 relative">
           {/* 신비로운 오라 효과 */}
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className="w-96 h-96 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
+            <div className="w-48 h-48 sm:w-64 sm:h-64 md:w-80 md:h-80 lg:w-96 lg:h-96 bg-gradient-to-r from-red-500/10 via-orange-500/10 to-yellow-500/10 rounded-full blur-3xl animate-pulse"></div>
           </div>
 
-          <div className="mb-8 relative z-10">
-            <div className="text-8xl mb-6 transform hover:scale-110 transition-transform duration-500">
+          <div className="mb-6 sm:mb-8 relative z-10">
+            <div className="text-4xl sm:text-6xl lg:text-8xl mb-4 sm:mb-6 transform hover:scale-110 transition-transform duration-500">
               🏛️
             </div>
-            <h1 className="text-6xl font-black mb-8 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent font-['Noto_Sans_KR'] drop-shadow-lg tracking-wider">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500 bg-clip-text text-transparent font-['Noto_Sans_KR'] drop-shadow-lg tracking-wider leading-tight">
               UDH-의성데몬헌터
             </h1>
-            <p className="text-2xl text-gray-700 mb-8 font-['Pretendard'] font-medium leading-relaxed max-w-4xl mx-auto">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-700 mb-6 sm:mb-8 font-['Pretendard'] font-medium leading-relaxed max-w-4xl mx-auto px-2">
               고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!
             </p>
           </div>
 
           {/* 로그인 버튼 */}
-          <div className="flex justify-end mb-8 relative z-10">
+          <div className="flex justify-center sm:justify-end mb-6 sm:mb-8 relative z-10">
             <AuthButtons />
           </div>
         </div>
 
         {/* 메인 컨텐츠 */}
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12  mb-20">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 lg:gap-12 mb-12 sm:mb-16 lg:mb-20">
           {/* 왼쪽: 게임 소개 */}
-          <div className="space-y-8">
-            <div className="bg-white/85 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-orange-200 relative overflow-hidden group">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+          <div className="space-y-6 sm:space-y-8 order-2 lg:order-1">
+            <div className="bg-white/85 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 lg:p-8 border border-orange-200 relative overflow-hidden group">
+              <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-              <h2 className="text-3xl font-bold text-red-600 mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
+              <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600 mb-4 sm:mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
                 🎮 게임 소개
               </h2>
 
-              <div className="space-y-4 text-lg text-gray-700 relative z-10">
+              <div className="space-y-3 sm:space-y-4 text-sm sm:text-base lg:text-lg text-gray-700 relative z-10">
                 <p className="font-['Pretendard'] font-medium">
                   <span className="font-bold text-red-600">고운사</span>에
                   <span className="font-bold text-purple-600">
@@ -202,69 +202,71 @@ export default function Home() {
             </div>
 
             {/* 게임 특징 */}
-            <div className="bg-white/85 backdrop-blur-md rounded-2xl shadow-2xl p-8 border border-orange-200 relative overflow-hidden group">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            <div className="bg-white/85 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-4 sm:p-6 lg:p-8 border border-orange-200 relative overflow-hidden group">
+              <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-              <h3 className="text-2xl font-bold text-red-600 mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
+              <h3 className="text-lg sm:text-xl lg:text-2xl font-bold text-red-600 mb-4 sm:mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
                 ✨ 게임 특징
               </h3>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 relative z-10">
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-red-50 to-pink-50 p-3 rounded-xl border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-[1.02]">
-                  <div className="w-8 h-8 bg-red-100 rounded-full flex items-center justify-center text-lg">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 relative z-10">
+                <div className="flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-red-50 to-pink-50 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-red-200 hover:border-red-300 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-red-100 rounded-full flex items-center justify-center text-sm sm:text-lg flex-shrink-0">
                     🗺️
                   </div>
-                  <span className="text-gray-700 font-['Pretendard'] font-medium">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-['Pretendard'] font-medium">
                     30개 위치 탐험
                   </span>
                 </div>
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-purple-50 to-indigo-50 p-3 rounded-xl border border-purple-200 hover:border-purple-300 transition-all duration-300 transform hover:scale-[1.02]">
-                  <div className="w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center text-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-purple-50 to-indigo-50 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-purple-200 hover:border-purple-300 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-purple-100 rounded-full flex items-center justify-center text-sm sm:text-lg flex-shrink-0">
                     🐉
                   </div>
-                  <span className="text-gray-700 font-['Pretendard'] font-medium">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-['Pretendard'] font-medium">
                     9종 요괴 퇴치
                   </span>
                 </div>
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-blue-50 to-cyan-50 p-3 rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-[1.02]">
-                  <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-blue-50 to-cyan-50 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-blue-200 hover:border-blue-300 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-blue-100 rounded-full flex items-center justify-center text-sm sm:text-lg flex-shrink-0">
                     📖
                   </div>
-                  <span className="text-gray-700 font-['Pretendard'] font-medium">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-['Pretendard'] font-medium">
                     풍부한 스토리
                   </span>
                 </div>
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-green-50 to-emerald-50 p-3 rounded-xl border border-green-200 hover:border-green-300 transition-all duration-300 transform hover:scale-[1.02]">
-                  <div className="w-8 h-8 bg-green-100 rounded-full flex items-center justify-center text-lg">
+                <div className="flex items-center space-x-2 sm:space-x-3 bg-gradient-to-r from-green-50 to-emerald-50 p-2 sm:p-3 rounded-lg sm:rounded-xl border border-green-200 hover:border-green-300 transition-all duration-300 transform hover:scale-[1.02]">
+                  <div className="w-6 h-6 sm:w-8 sm:h-8 bg-green-100 rounded-full flex items-center justify-center text-sm sm:text-lg flex-shrink-0">
                     🎯
                   </div>
-                  <span className="text-gray-700 font-['Pretendard'] font-medium">
+                  <span className="text-xs sm:text-sm lg:text-base text-gray-700 font-['Pretendard'] font-medium">
                     전략적 선택
                   </span>
                 </div>
               </div>
             </div>
           </div>
-          <div className="text-center relative">
-            <div className="bg-white/85 backdrop-blur-md rounded-2xl shadow-2xl p-12 border border-orange-200 relative overflow-hidden group">
-              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-              <div className="text-gray-400 text-8xl mb-8 transform hover:scale-110 transition-transform duration-500 relative z-10">
+          {/* 오른쪽: 게임 시작 섹션 */}
+          <div className="text-center relative order-1 lg:order-2">
+            <div className="bg-white/85 backdrop-blur-md rounded-xl sm:rounded-2xl shadow-xl sm:shadow-2xl p-6 sm:p-8 lg:p-12 border border-orange-200 relative overflow-hidden group">
+              <div className="absolute inset-0 rounded-xl sm:rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+              <div className="text-gray-400 text-4xl sm:text-6xl lg:text-8xl mb-4 sm:mb-6 lg:mb-8 transform hover:scale-110 transition-transform duration-500 relative z-10">
                 🏛️
               </div>
-              <h3 className="text-3xl font-bold text-red-600 mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
+              <h3 className="text-xl sm:text-2xl lg:text-3xl font-bold text-red-600 mb-4 sm:mb-6 font-['Noto_Sans_KR'] relative z-10 tracking-wide">
                 UDH-의성데몬헌터에 오신 것을 환영합니다
               </h3>
-              <p className="text-xl text-gray-700 mb-8 font-['Pretendard'] font-medium leading-relaxed relative z-10">
+              <p className="text-sm sm:text-base lg:text-xl text-gray-700 mb-6 sm:mb-8 font-['Pretendard'] font-medium leading-relaxed relative z-10 px-2">
                 "새 게임 시작" 버튼을 클릭하여 요괴 퇴치 모험을 시작하거나
-                <br />
+                <br className="hidden sm:block" />
                 "기존 게임 로드"로 이전 모험을 이어가세요
               </p>
-              <div className="space-y-4 relative z-10">
+              <div className="space-y-3 sm:space-y-4 relative z-10">
                 <button
                   onClick={handleStartNewGame}
                   disabled={loading}
-                  className="group w-full px-8 py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-xl font-black rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:ring-4 focus:ring-emerald-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden font-['Noto_Sans_KR'] tracking-wide"
+                  className="group w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-emerald-500 to-teal-600 text-white text-sm sm:text-base lg:text-xl font-black rounded-lg sm:rounded-xl hover:from-emerald-600 hover:to-teal-700 focus:ring-4 focus:ring-emerald-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-300 transform hover:scale-105 shadow-xl sm:shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden font-['Noto_Sans_KR'] tracking-wide"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   <span className="relative z-10">
@@ -274,7 +276,7 @@ export default function Home() {
                 <button
                   onClick={handleLoadGame}
                   disabled={loading}
-                  className="group w-full px-8 py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-xl font-black rounded-xl hover:from-amber-600 hover:to-orange-700 focus:ring-4 focus:ring-amber-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-300 transform hover:scale-105 shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden font-['Noto_Sans_KR'] tracking-wide"
+                  className="group w-full px-4 sm:px-6 lg:px-8 py-3 sm:py-4 bg-gradient-to-r from-amber-500 to-orange-600 text-white text-sm sm:text-base lg:text-xl font-black rounded-lg sm:rounded-xl hover:from-amber-600 hover:to-orange-700 focus:ring-4 focus:ring-amber-300 focus:ring-offset-2 disabled:opacity-50 transition-all duration-300 transform hover:scale-105 shadow-xl sm:shadow-2xl hover:shadow-emerald-500/50 relative overflow-hidden font-['Noto_Sans_KR'] tracking-wide"
                 >
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
                   <span className="relative z-10">
@@ -287,8 +289,8 @@ export default function Home() {
         </div>
 
         {/* 푸터 */}
-        <div className="text-center mt-20 pt-8 border-t border-orange-200 relative z-10">
-          <p className="text-gray-600 font-['Pretendard'] font-medium">
+        <div className="text-center mt-12 sm:mt-16 lg:mt-20 pt-6 sm:pt-8 border-t border-orange-200 relative z-10">
+          <p className="text-xs sm:text-sm lg:text-base text-gray-600 font-['Pretendard'] font-medium px-2">
             🏛️ UDH-의성데몬헌터 - 전통과 판타지의 만남 🐉
           </p>
         </div>
