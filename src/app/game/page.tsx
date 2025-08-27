@@ -4,12 +4,10 @@ import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
 import { Notification } from '@/components/Notification';
-import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 export default function GamePage() {
-  const { data: session, status } = useSession();
   const router = useRouter();
   const [processingChoice, setProcessingChoice] = useState<number | null>(null);
   const {
@@ -27,29 +25,20 @@ export default function GamePage() {
     closeNotification,
   } = useGame();
 
-  // 로그인하지 않은 경우 로그인 페이지로 리다이렉트
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin');
-    }
-  }, [status, router]);
-
   // 컴포넌트 마운트 시 게임 정보 자동 로드
   useEffect(() => {
-    if (status === 'authenticated' && session) {
-      autoLoadGameInfo();
-    }
-  }, [status, session, autoLoadGameInfo]);
+    autoLoadGameInfo();
+  }, [autoLoadGameInfo]);
 
   // gameData가 있을 때 자동으로 게임 정보 로드
   useEffect(() => {
-    if (gameData && status === 'authenticated' && session) {
+    if (gameData) {
       loadGameInfo();
     }
-  }, [gameData, status, session, loadGameInfo]);
+  }, [gameData, loadGameInfo]);
 
   // 로딩 중일 때
-  if (status === 'loading') {
+  if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-amber-50 via-orange-50 to-red-50 flex items-center justify-center relative overflow-hidden">
         {/* 배경 이미지 */}
@@ -81,8 +70,10 @@ export default function GamePage() {
   }
 
   // 인증되지 않은 경우
-  if (!session) {
-    return null; // 리다이렉트 중
+  if (!gameData) {
+    // gameData가 없으면 로그인 페이지로 리다이렉트
+    router.push('/auth/signin');
+    return null;
   }
 
   const handleStartNewGame = async () => {
@@ -383,7 +374,7 @@ export default function GamePage() {
         )}
 
         {/* 게임이 시작되지 않은 경우 */}
-        {!gameData && !gameInfo && !loading && (
+        {!gameData && !loading && (
           <div className="bg-white/85 backdrop-blur-md rounded-2xl shadow-2xl p-12 border border-orange-200 text-center relative overflow-hidden">
             <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-red-500/20 via-orange-500/20 to-yellow-500/20 opacity-0 hover:opacity-100 transition-opacity duration-500"></div>
 

@@ -1,13 +1,9 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useSession, signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { gameService } from '@/lib/api/gameService';
-import { httpClient } from '@/lib/api/client';
 import type { GameData, GameInfo, SelectChoiceRequest } from '@/types/api';
 
-// 게임 상태를 관리하는 Hook
+// 게임 상태를 관리하는 Hook (정적 내보내기용)
 export function useGame() {
-  const { data: session } = useSession();
   const router = useRouter();
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
@@ -18,85 +14,42 @@ export function useGame() {
     type: 'success' | 'error' | 'warning' | 'info';
   } | null>(null);
 
-  // 401 에러 발생 시 자동 로그아웃 처리
-  const handleUnauthorized = useCallback(() => {
-    console.log('401 에러로 인한 자동 로그아웃 처리');
-    const message = '다시 로그인 해주세요!';
-    setError(message);
-    setNotification({
-      message,
-      type: 'error',
-    });
-    setGameData(null);
-    setGameInfo(null);
-
-    // 잠시 후 로그아웃 처리 (사용자가 알림을 볼 수 있도록)
-    setTimeout(() => {
-      signOut({ callbackUrl: '/' });
-    }, 2000);
-  }, []);
-
-  // HTTP 클라이언트에 401 에러 콜백 설정
-  useEffect(() => {
-    httpClient.setUnauthorizedCallback(handleUnauthorized);
-  }, [handleUnauthorized]);
-
   // 알림 닫기
   const closeNotification = useCallback(() => {
     setNotification(null);
   }, []);
 
-  // Google ID 토큰 가져오기
-  const getGoogleIdToken = useCallback(async () => {
-    if (!session) {
-      throw new Error('로그인이 필요합니다.');
-    }
-
-    // NextAuth.js v5에서는 session에서 직접 토큰을 가져올 수 있음
-    // 실제로는 Google OAuth의 id_token을 사용해야 함
-    if (session.providerToken) {
-      return session.providerToken as string;
-    }
-
-    // providerToken이 없는 경우 accessToken 사용
-    if (session.accessToken) {
-      return session.accessToken as string;
-    }
-
-    throw new Error('Google ID 토큰이 없습니다. 다시 로그인해주세요.');
-  }, [session]);
-
-  // 새 게임 시작
+  // 새 게임 시작 (정적 버전에서는 데모 데이터 사용)
   const startNewGame = useCallback(async () => {
-    if (!session) {
-      setError('로그인이 필요합니다.');
-      return { success: false, error: '로그인이 필요합니다.' };
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const token = await getGoogleIdToken();
-      const response = await gameService.startNewGame(token);
+      // 정적 버전에서는 데모 게임 데이터 생성
+      const demoGameData: GameData = {
+        id: 'demo-game-1',
+        title: 'UDH-의성데몬헌터',
+        description: '고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!',
+        content: '고운사에 도착했습니다. 요괴의 기운이 느껴집니다...',
+        choices: [
+          '사찰 안으로 들어간다',
+          '주변을 탐색한다',
+          '도망간다'
+        ],
+        current_state: '고운사_입구',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
 
-      if (response.success) {
-        // response.data가 null이어도 성공으로 처리 (백엔드에서 새 게임 생성 후 리다이렉트하는 경우)
-        if (response.data) {
-          setGameData(response.data);
-        }
+      setGameData(demoGameData);
+      
+      // 성공 알림 표시
+      setNotification({
+        message: '새 게임이 시작되었습니다! (데모 모드)',
+        type: 'success',
+      });
 
-        // 성공 알림 표시
-        setNotification({
-          message: response.message || '새 게임이 시작되었습니다!',
-          type: 'success',
-        });
-
-        return { success: true, data: response.data };
-      } else {
-        setError(response.error || '새 게임을 시작하는데 실패했습니다.');
-        return { success: false, error: response.error };
-      }
+      return { success: true, data: demoGameData };
     } catch (err) {
       console.error('새 게임 시작 중 예외 발생:', err);
       setError('예상치 못한 오류가 발생했습니다.');
@@ -104,37 +57,21 @@ export function useGame() {
     } finally {
       setLoading(false);
     }
-  }, [session, getGoogleIdToken]);
+  }, []);
 
-  // 게임 로드
+  // 게임 로드 (정적 버전에서는 데모 데이터 사용)
   const loadGame = useCallback(async () => {
-    if (!session) {
-      setError('로그인이 필요합니다.');
-      return { success: false, error: '로그인이 필요합니다.' };
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const token = await getGoogleIdToken();
-      const response = await gameService.loadGame(token);
+      // 정적 버전에서는 저장된 게임이 없다고 가정
+      setNotification({
+        message: '저장된 게임이 없습니다. 새 게임을 시작해주세요.',
+        type: 'info',
+      });
 
-      if (response.success) {
-        // response.data가 null이어도 성공으로 처리 (백엔드 리다이렉트 케이스)
-        if (response.data) {
-          setGameData(response.data);
-        }
-
-        return {
-          success: true,
-          data: response.data,
-          message: response.message || '게임을 불러왔습니다.',
-        };
-      } else {
-        setError(response.error || '게임을 불러오는데 실패했습니다.');
-        return { success: false, error: response.error };
-      }
+      return { success: false, error: '저장된 게임이 없습니다.' };
     } catch (err) {
       console.error('loadGame 예외 발생:', err);
       setError('예상치 못한 오류가 발생했습니다.');
@@ -142,25 +79,28 @@ export function useGame() {
     } finally {
       setLoading(false);
     }
-  }, [session, getGoogleIdToken]);
+  }, []);
 
-  // 게임 정보 자동 로드 (리다이렉트 후 사용)
+  // 게임 정보 자동 로드 (정적 버전에서는 데모 데이터 사용)
   const autoLoadGameInfo = useCallback(async () => {
-    if (!session) {
-      return { success: false, error: '로그인이 필요합니다.' };
-    }
-
     try {
-      const token = await getGoogleIdToken();
-      const response = await gameService.loadGameInfo(token);
+      // 정적 버전에서는 데모 게임 정보 생성
+      const demoGameInfo: GameInfo = {
+        game_id: 'demo-game-1',
+        title: 'UDH-의성데몬헌터',
+        description: '고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!',
+        current_state: '고운사_입구',
+        progress: 0,
+        current_location: '고운사_입구',
+        choices: [
+          '사찰 안으로 들어간다',
+          '주변을 탐색한다',
+          '도망간다'
+        ]
+      };
 
-      if (response.success && response.data) {
-        setGameInfo(response.data);
-        return { success: true, data: response.data };
-      } else {
-        setError(response.error || '게임 정보를 불러오는데 실패했습니다.');
-        return { success: false, error: response.error };
-      }
+      setGameInfo(demoGameInfo);
+      return { success: true, data: demoGameInfo };
     } catch (err) {
       setError('게임 정보 로드 중 오류가 발생했습니다.');
       return {
@@ -168,70 +108,74 @@ export function useGame() {
         error: '게임 정보 로드 중 오류가 발생했습니다.',
       };
     }
-  }, [session, getGoogleIdToken]);
+  }, []);
 
   // 게임 정보 로드
   const loadGameInfo = useCallback(async () => {
-    if (!session) {
-      // 로그인하지 않은 경우 게임 정보를 로드하지 않음
-      return { success: false, error: '로그인이 필요합니다.' };
-    }
-
     setLoading(true);
     setError(null);
 
     try {
-      const token = await getGoogleIdToken();
-      const response = await gameService.loadGameInfo(token);
+      // 정적 버전에서는 데모 게임 정보 생성
+      const demoGameInfo: GameInfo = {
+        game_id: 'demo-game-1',
+        title: 'UDH-의성데몬헌터',
+        description: '고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하라!',
+        current_state: '고운사_입구',
+        progress: 0,
+        current_location: '고운사_입구',
+        choices: [
+          '사찰 안으로 들어간다',
+          '주변을 탐색한다',
+          '도망간다'
+        ]
+      };
 
-      if (response.success && response.data) {
-        setGameInfo(response.data);
-        return { success: true, data: response.data };
-      } else {
-        setError(response.error || '게임 정보를 불러오는데 실패했습니다.');
-        return { success: false, error: response.error };
-      }
+      setGameInfo(demoGameInfo);
+      return { success: true, data: demoGameInfo };
     } catch (err) {
       setError('예상치 못한 오류가 발생했습니다.');
       return { success: false, error: '예상치 못한 오류가 발생했습니다.' };
     } finally {
       setLoading(false);
     }
-  }, [session, getGoogleIdToken]);
+  }, []);
 
-  // 선택지 선택
+  // 선택지 선택 (정적 버전에서는 데모 데이터 사용)
   const selectChoice = useCallback(
     async (choiceIndex: number) => {
-      if (!session) {
-        setError('로그인이 필요합니다.');
-        return { success: false, error: '로그인이 필요합니다.' };
-      }
-
       setLoading(true);
       setError(null);
 
       try {
-        const token = await getGoogleIdToken();
-        const data: SelectChoiceRequest = { select: choiceIndex };
-        const response = await gameService.selectChoice(data, token);
+        // 정적 버전에서는 데모 게임 진행
+        const choices = [
+          '고운사 안으로 들어갑니다. 요괴의 기운이 더욱 강해집니다...',
+          '주변을 탐색합니다. 숨겨진 단서를 발견했습니다!',
+          '도망갑니다. 하지만 이미 늦었습니다...'
+        ];
 
-        if (response.success && response.data) {
-          setGameData(response.data);
-          // 선택 후 게임 정보도 업데이트
-          try {
-            const infoResponse = await gameService.loadGameInfo(token);
-            if (infoResponse.success && infoResponse.data) {
-              setGameInfo(infoResponse.data);
-            }
-          } catch (infoErr) {
-            console.warn('게임 정보 업데이트 실패:', infoErr);
-          }
-          return { success: true, data: response.data };
-        } else {
-          // 500 에러 등 실패 시 에러 설정
-          setError(response.error || '선택에 실패했습니다.');
-          return { success: false, error: response.error };
-        }
+        const newGameData: GameData = {
+          ...gameData!,
+          content: choices[choiceIndex] || '선택을 진행합니다...',
+          current_state: `진행_${choiceIndex + 1}`,
+          choices: [
+            '계속 진행한다',
+            '잠시 멈춘다',
+            '돌아간다'
+          ],
+          updated_at: new Date().toISOString()
+        };
+
+        setGameData(newGameData);
+        
+        // 성공 알림 표시
+        setNotification({
+          message: '선택이 완료되었습니다!',
+          type: 'success',
+        });
+
+        return { success: true, data: newGameData };
       } catch (err) {
         setError('예상치 못한 오류가 발생했습니다.');
         return { success: false, error: '예상치 못한 오류가 발생했습니다.' };
@@ -239,7 +183,7 @@ export function useGame() {
         setLoading(false);
       }
     },
-    [session, getGoogleIdToken]
+    [gameData]
   );
 
   // 게임 상태 초기화
@@ -255,7 +199,7 @@ export function useGame() {
     loading,
     error,
     notification,
-    isAuthenticated: !!session,
+    isAuthenticated: true, // 정적 버전에서는 항상 인증된 것으로 가정
     startNewGame,
     loadGame,
     loadGameInfo,
