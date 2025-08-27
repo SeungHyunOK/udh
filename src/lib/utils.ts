@@ -128,9 +128,10 @@ export function throttle<T extends (...args: any[]) => any>(
   };
 }
 
-// 로컬 스토리지 유틸리티
+// 로컬 스토리지 유틸리티 (정적 내보내기에서는 사용 불가)
 export const storage = {
   get: (key: string): any => {
+    if (typeof window === 'undefined') return null;
     try {
       const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : null;
@@ -140,6 +141,7 @@ export const storage = {
   },
 
   set: (key: string, value: any): void => {
+    if (typeof window === 'undefined') return;
     try {
       localStorage.setItem(key, JSON.stringify(value));
     } catch {
@@ -148,6 +150,7 @@ export const storage = {
   },
 
   remove: (key: string): void => {
+    if (typeof window === 'undefined') return;
     try {
       localStorage.removeItem(key);
     } catch {
@@ -156,9 +159,10 @@ export const storage = {
   },
 };
 
-// 세션 스토리지 유틸리티
+// 세션 스토리지 유틸리티 (정적 내보내기에서는 사용 불가)
 export const sessionStorageUtil = {
   get: (key: string): any => {
+    if (typeof window === 'undefined') return null;
     try {
       const item = window.sessionStorage.getItem(key);
       return item ? JSON.parse(item) : null;
@@ -168,6 +172,7 @@ export const sessionStorageUtil = {
   },
 
   set: (key: string, value: any): void => {
+    if (typeof window === 'undefined') return;
     try {
       window.sessionStorage.setItem(key, JSON.stringify(value));
     } catch {
@@ -176,6 +181,7 @@ export const sessionStorageUtil = {
   },
 
   remove: (key: string): void => {
+    if (typeof window === 'undefined') return;
     try {
       window.sessionStorage.removeItem(key);
     } catch {

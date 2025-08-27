@@ -1,10 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
 import type { GameData, GameInfo, SelectChoiceRequest } from '@/types/api';
 
 // 게임 상태를 관리하는 Hook (정적 내보내기용)
 export function useGame() {
-  const router = useRouter();
   const [gameData, setGameData] = useState<GameData | null>(null);
   const [gameInfo, setGameInfo] = useState<GameInfo | null>(null);
   const [loading, setLoading] = useState(false);
