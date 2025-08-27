@@ -3,6 +3,13 @@ export function cn(...inputs: (string | undefined | null | false)[]): string {
   return inputs.filter(Boolean).join(' ');
 }
 
+// 이미지 경로를 동적으로 처리하는 함수
+export function getImagePath(path: string): string {
+  const isProd = process.env.NODE_ENV === 'production';
+  const basePath = isProd ? '/udh' : '';
+  return `${basePath}${path}`;
+}
+
 // 날짜를 한국어 형식으로 포맷팅
 export function formatDate(date: string | Date): string {
   const d = new Date(date);

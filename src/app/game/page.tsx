@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useGame } from '@/hooks/useGame';
 import { AuthButtons } from '@/components/AuthButtons';
 import { Notification } from '@/components/Notification';
+import { getImagePath } from '@/lib/utils';
 import Image from 'next/image';
 
 export default function GamePage() {
@@ -91,7 +92,7 @@ export default function GamePage() {
         {/* 배경 이미지 */}
         <div className="absolute inset-0 z-0">
           <Image
-            src="/images/game/background.png"
+            src={getImagePath("/images/game/background.png")}
             alt="게임 배경"
             fill
             className="object-cover opacity-20"
@@ -147,7 +148,7 @@ export default function GamePage() {
       {/* 배경 이미지 */}
       <div className="absolute inset-0 z-0">
         <Image
-          src="/images/game/background.png"
+          src={getImagePath("/images/game/background.png")}
           alt="게임 배경"
           fill
           className="object-cover opacity-20"

@@ -1,3 +1,4 @@
+/* Tailwind CSS */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -11,12 +12,32 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family:
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 }
 
 a {
   color: inherit;
   text-decoration: none;
+}
+
+/* Tailwind CSS 유틸리티 클래스 강제 적용 */
+.bg-gradient-to-br {
+  background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
+}
+
+.from-orange-100 {
+  --tw-gradient-from: #fed7aa;
+  --tw-gradient-to: rgb(254 215 170 / 0);
+  --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to);
+}
+
+.via-red-50 {
+  --tw-gradient-stops: var(--tw-gradient-from), #fef2f2, var(--tw-gradient-to);
+}
+
+.to-yellow-100 {
+  --tw-gradient-to: #fef3c7;
 }
 
 /* 커스텀 애니메이션 */
