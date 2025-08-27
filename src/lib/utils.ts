@@ -1,9 +1,6 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
-
-// Tailwind CSS 클래스들을 병합하는 유틸리티 함수
-export function cn(...inputs: ClassValue[]) {
-  return twMerge(clsx(inputs));
+// 간단한 클래스 병합 유틸리티 함수
+export function cn(...inputs: (string | undefined | null | false)[]): string {
+  return inputs.filter(Boolean).join(' ');
 }
 
 // 날짜를 한국어 형식으로 포맷팅
