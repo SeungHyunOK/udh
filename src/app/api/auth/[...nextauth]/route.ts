@@ -1,6 +1,9 @@
 import NextAuth from 'next-auth';
 import Google from 'next-auth/providers/google';
 
+// 정적 내보내기에서 제외
+export const dynamic = 'force-dynamic';
+
 const handler = NextAuth({
   providers: [
     Google({

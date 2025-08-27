@@ -17,6 +17,9 @@ const nextConfig: NextConfig = {
 
   // 새로고침 404 방지에 도움(정적 사이트에서 권장)
   trailingSlash: true,
+
+  // 정적 내보내기에서 제외할 경로
+  distDir: 'out',
 };
 
 export default nextConfig;
