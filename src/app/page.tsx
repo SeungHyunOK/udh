@@ -90,7 +90,8 @@ export default function Home() {
               🚀 게임을 시작하세요!
             </h2>
             <p className="text-xl text-gray-700 mb-8 max-w-3xl mx-auto font-['Pretendard'] font-medium">
-              고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하는 모험을 시작하세요!
+              고운사를 장악한 요괴들을 퇴치하고 사찰을 정화하는 모험을
+              시작하세요!
             </p>
           </section>
 
@@ -133,14 +134,19 @@ export default function Home() {
                     <span className="text-2xl">🏯</span>
                     <div>
                       <h4 className="font-bold text-gray-800">고운사 탐험</h4>
-                      <p className="text-gray-600">의성의 유서깊은 사찰을 탐험하며 요괴의 흔적을 찾아보세요.</p>
+                      <p className="text-gray-600">
+                        의성의 유서깊은 사찰을 탐험하며 요괴의 흔적을
+                        찾아보세요.
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="text-2xl">👻</span>
                     <div>
                       <h4 className="font-bold text-gray-800">요괴 퇴치</h4>
-                      <p className="text-gray-600">다양한 요괴들을 만나고 퇴치하여 사찰을 정화하세요.</p>
+                      <p className="text-gray-600">
+                        다양한 요괴들을 만나고 퇴치하여 사찰을 정화하세요.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -149,14 +155,18 @@ export default function Home() {
                     <span className="text-2xl">🧭</span>
                     <div>
                       <h4 className="font-bold text-gray-800">선택의 여정</h4>
-                      <p className="text-gray-600">매 순간의 선택이 이야기를 만들어갑니다.</p>
+                      <p className="text-gray-600">
+                        매 순간의 선택이 이야기를 만들어갑니다.
+                      </p>
                     </div>
                   </div>
                   <div className="flex items-start space-x-3">
                     <span className="text-2xl">💎</span>
                     <div>
                       <h4 className="font-bold text-gray-800">아이템 수집</h4>
-                      <p className="text-gray-600">여행 중 발견하는 특별한 아이템들을 수집하세요.</p>
+                      <p className="text-gray-600">
+                        여행 중 발견하는 특별한 아이템들을 수집하세요.
+                      </p>
                     </div>
                   </div>
                 </div>
